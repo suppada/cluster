@@ -1,7 +1,13 @@
 pipeline {
     agent any
     stages{
-        stage ('git-checkout'){
+        stage('gitcheckout') {
+            steps {
+                echo 'Hello World'
+                checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/suppada/cluster.git']]])
+            }
+        }
+        stage('eks') {
             steps{
                 sh 'eksctl create cluster -f eks-cluster.yml --dry-run'
             }
