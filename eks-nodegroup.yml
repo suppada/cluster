@@ -1,0 +1,60 @@
+# ClusterConfig object using Managed Nodes and attaching node template to eks cluster
+
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: EKS-cluster-test
+  region: us-east-1
+
+nodeGroups:
+  - name: eks-nodegroup
+    instanceName: eks-test
+    instanceType: t2.small
+    minSize: 1
+    maxSize: 2
+    desiredCapacity: 2
+    # availabilityZones: ["us-east-1a", "us-east-1b"]
+    # privateNetworking: true
+    volumeSize: 30
+    volumeType: gp2
+    ssh:
+      publicKeyName: suresh
+
+# managedNodeGroups:
+#   - name: eks-nodegroup
+#     labels: { role: workers }
+#     ami: ami-0b0af3577fe5e3532
+#     preBootstrapCommands:
+#       # disable hyperthreading
+#       - "for n in $(cat /sys/devices/system/cpu/cpu*/topology/thread_siblings_list | cut -s -d, -f2- | tr ',' '\n' | sort -un); do echo 0 > /sys/devices/system/cpu/cpu${n}/online; done"
+#     overrideBootstrapCommand: |
+#       #!/bin/bash
+#       /etc/eks/bootstrap.sh EKS-cluster-test
+#     instanceName: eks-test
+#     instanceType: t2.small
+#     minSize: 1
+#     maxSize: 2
+#     desiredCapacity: 2
+#     # availabilityZones: ["us-east-1a", "us-east-1b"]
+#     # privateNetworking: true
+#     volumeSize: 30
+#     volumeType: gp2
+#     ssh:
+#       publicKeyName: suresh
+#     tags:
+#       nodegroup-role: workers
+
+  # - name: custom-ami
+  #   ami: ami-0b0af3577fe5e3532
+  #   preBootstrapCommands:
+  #     # disable hyperthreading
+  #     - "for n in $(cat /sys/devices/system/cpu/cpu*/topology/thread_siblings_list | cut -s -d, -f2- | tr ',' '\n' | sort -un); do echo 0 > /sys/devices/system/cpu/cpu${n}/online; done"
+  #   overrideBootstrapCommand: |
+  #     #!/bin/bash
+  #     /etc/eks/bootstrap.sh EKS-cluster-test
+
+  # - name: eks-suresh-test
+  #   launchTemplate:
+  #     id: lt-id
+  #     version: "3"
